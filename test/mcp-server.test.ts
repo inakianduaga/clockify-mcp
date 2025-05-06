@@ -35,8 +35,9 @@ describe("MCP Server Tools", () => {
     const result = await callToolHandler({
       params: { name: "listProjects", arguments: {} },
     });
-    const projects: Array<{ id: string; name: string }> =
-      result.content[0].json;
+    const projects: Array<{ id: string; name: string }> = JSON.parse(
+      result.content[0].text,
+    );
     expect(projects[0].name).toBe("Project 1");
   });
 
@@ -52,8 +53,9 @@ describe("MCP Server Tools", () => {
     const result = await callToolHandler({
       params: { name: "getTimeEntries", arguments: {} },
     });
-    const entries: Array<{ id: string; description: string }> =
-      result.content[0].json;
+    const entries: Array<{ id: string; description: string }> = JSON.parse(
+      result.content[0].text,
+    );
     expect(entries[0].description).toBe("Worked on X");
   });
 
@@ -77,7 +79,9 @@ describe("MCP Server Tools", () => {
         },
       },
     });
-    const entry: { id: string; description: string } = result.content[0].json;
+    const entry: { id: string; description: string } = JSON.parse(
+      result.content[0].text,
+    );
     expect(entry.description).toBe("Added entry");
   });
 
@@ -96,7 +100,9 @@ describe("MCP Server Tools", () => {
     const result = await callToolHandler({
       params: { name: "listUsers", arguments: {} },
     });
-    const users: Array<{ id: string; name: string }> = result.content[0].json;
+    const users: Array<{ id: string; name: string }> = JSON.parse(
+      result.content[0].text,
+    );
     expect(users.length).toBe(2);
     expect(users[0].name).toBe("Alice");
   });
@@ -116,8 +122,9 @@ describe("MCP Server Tools", () => {
         arguments: { userId: "u1", start: "2024-01-01", end: "2024-01-31" },
       },
     });
-    const entries: Array<{ id: string; description: string }> =
-      result.content[0].json;
+    const entries: Array<{ id: string; description: string }> = JSON.parse(
+      result.content[0].text,
+    );
     expect(entries[0].description).toBe("Worked on Project");
   });
 
@@ -148,7 +155,7 @@ describe("MCP Server Tools", () => {
     });
     const summary: {
       totals: Array<{ userId: string; projectId: string; totalTime: number }>;
-    } = result.content[0].json;
+    } = JSON.parse(result.content[0].text);
     expect(summary.totals.length).toBe(2);
     expect(summary.totals[0].userId).toBe("u1");
     expect(summary.totals[1].totalTime).toBe(1800);
@@ -168,17 +175,21 @@ describe("MCP Server Tools", () => {
     });
     fetchMock.mockResolvedValueOnce({
       ok: true,
-      json: async () => [
-        { id: "te1", description: "Worked on Project" },
-      ],
+      json: async () => [{ id: "te1", description: "Worked on Project" }],
     });
     const result = await callToolHandler({
       params: {
         name: "getUserTimeEntriesByName",
-        arguments: { userName: "inaki anduaga", start: "2024-04-01", end: "2024-04-30" },
+        arguments: {
+          userName: "inaki anduaga",
+          start: "2024-04-01",
+          end: "2024-04-30",
+        },
       },
     });
-    const entries: Array<{ id: string; description: string }> = result.content[0].json;
+    const entries: Array<{ id: string; description: string }> = JSON.parse(
+      result.content[0].text,
+    );
     expect(entries[0].description).toBe("Worked on Project");
   });
 });

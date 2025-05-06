@@ -20,6 +20,7 @@ async function clockifyFetch(endpoint: string, options: RequestInit = {}) {
     ...(options.headers || {}),
   };
   const response = await fetch(url, { ...options, headers });
+
   if (!response.ok) {
     const text = await response.text();
     console.error(
@@ -130,9 +131,18 @@ export async function listToolsHandler() {
         inputSchema: {
           type: "object",
           properties: {
-            userName: { type: "string", description: "User name (partial/case-insensitive)" },
-            start: { type: "string", description: "Start date (ISO8601, optional)" },
-            end: { type: "string", description: "End date (ISO8601, optional)" },
+            userName: {
+              type: "string",
+              description: "User name (partial/case-insensitive)",
+            },
+            start: {
+              type: "string",
+              description: "Start date (ISO8601, optional)",
+            },
+            end: {
+              type: "string",
+              description: "End date (ISO8601, optional)",
+            },
           },
           required: ["userName"],
         },
@@ -163,8 +173,8 @@ export async function callToolHandler(request: MCPCallToolRequest) {
       return {
         content: [
           {
-            type: "json",
-            json: projects,
+            type: "text",
+            text: JSON.stringify(projects, null, 2),
           },
         ],
       };
@@ -182,8 +192,8 @@ export async function callToolHandler(request: MCPCallToolRequest) {
       return {
         content: [
           {
-            type: "json",
-            json: entries,
+            type: "text",
+            text: JSON.stringify(entries, null, 2),
           },
         ],
       };
@@ -210,8 +220,8 @@ export async function callToolHandler(request: MCPCallToolRequest) {
       return {
         content: [
           {
-            type: "json",
-            json: entry,
+            type: "text",
+            text: JSON.stringify(entry, null, 2),
           },
         ],
       };
@@ -221,8 +231,8 @@ export async function callToolHandler(request: MCPCallToolRequest) {
       return {
         content: [
           {
-            type: "json",
-            json: users,
+            type: "text",
+            text: JSON.stringify(users, null, 2),
           },
         ],
       };
@@ -247,8 +257,8 @@ export async function callToolHandler(request: MCPCallToolRequest) {
       return {
         content: [
           {
-            type: "json",
-            json: entries,
+            type: "text",
+            text: JSON.stringify(entries, null, 2),
           },
         ],
       };
@@ -278,8 +288,8 @@ export async function callToolHandler(request: MCPCallToolRequest) {
       return {
         content: [
           {
-            type: "json",
-            json: report,
+            type: "text",
+            text: JSON.stringify(report, null, 2),
           },
         ],
       };
@@ -291,9 +301,11 @@ export async function callToolHandler(request: MCPCallToolRequest) {
       }
       // Fetch users
       const users = await clockifyFetch(`/workspaces/${workspaceId}/users`);
+      // Define a type for user
+      type User = { id: string; name: string };
       // Find user by name (case-insensitive, partial match)
-      const userMatch = users.find((u: any) =>
-        u.name && u.name.toLowerCase().includes(userName.toLowerCase())
+      const userMatch = (users as User[]).find(
+        (u) => u.name && u.name.toLowerCase().includes(userName.toLowerCase()),
       );
       if (!userMatch) {
         throw new Error(`No user found matching name: ${userName}`);
@@ -309,8 +321,8 @@ export async function callToolHandler(request: MCPCallToolRequest) {
       return {
         content: [
           {
-            type: "json",
-            json: entries,
+            type: "text",
+            text: JSON.stringify(entries, null, 2),
           },
         ],
       };
