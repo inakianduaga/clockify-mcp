@@ -153,4 +153,32 @@ describe("MCP Server Tools", () => {
     expect(summary.totals[0].userId).toBe("u1");
     expect(summary.totals[1].totalTime).toBe(1800);
   });
+
+  it("should call getUserTimeEntriesByName tool and return mocked entries", async () => {
+    fetchMock.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ activeWorkspace: "ws1", id: "user1" }),
+    });
+    fetchMock.mockResolvedValueOnce({
+      ok: true,
+      json: async () => [
+        { id: "u1", name: "Inaki Anduaga" },
+        { id: "u2", name: "Bob" },
+      ],
+    });
+    fetchMock.mockResolvedValueOnce({
+      ok: true,
+      json: async () => [
+        { id: "te1", description: "Worked on Project" },
+      ],
+    });
+    const result = await callToolHandler({
+      params: {
+        name: "getUserTimeEntriesByName",
+        arguments: { userName: "inaki anduaga", start: "2024-04-01", end: "2024-04-30" },
+      },
+    });
+    const entries: Array<{ id: string; description: string }> = result.content[0].json;
+    expect(entries[0].description).toBe("Worked on Project");
+  });
 });

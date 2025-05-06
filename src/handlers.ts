@@ -123,6 +123,20 @@ export async function listToolsHandler() {
           required: ["start", "end"],
         },
       },
+      {
+        name: "getUserTimeEntriesByName",
+        description:
+          "List time entries for a user by name (case-insensitive, partial match allowed). Optional: start, end (ISO8601).",
+        inputSchema: {
+          type: "object",
+          properties: {
+            userName: { type: "string", description: "User name (partial/case-insensitive)" },
+            start: { type: "string", description: "Start date (ISO8601, optional)" },
+            end: { type: "string", description: "End date (ISO8601, optional)" },
+          },
+          required: ["userName"],
+        },
+      },
     ],
   };
 }
@@ -266,6 +280,37 @@ export async function callToolHandler(request: MCPCallToolRequest) {
           {
             type: "json",
             json: report,
+          },
+        ],
+      };
+    }
+    case "getUserTimeEntriesByName": {
+      const { userName, start, end } = request.params.arguments || {};
+      if (!userName || typeof userName !== "string") {
+        throw new Error("userName is required");
+      }
+      // Fetch users
+      const users = await clockifyFetch(`/workspaces/${workspaceId}/users`);
+      // Find user by name (case-insensitive, partial match)
+      const userMatch = users.find((u: any) =>
+        u.name && u.name.toLowerCase().includes(userName.toLowerCase())
+      );
+      if (!userMatch) {
+        throw new Error(`No user found matching name: ${userName}`);
+      }
+      let url = `/workspaces/${workspaceId}/user/${userMatch.id}/time-entries`;
+      const params = [];
+      if (typeof start === "string" && start)
+        params.push(`start=${encodeURIComponent(start)}`);
+      if (typeof end === "string" && end)
+        params.push(`end=${encodeURIComponent(end)}`);
+      if (params.length) url += `?${params.join("&")}`;
+      const entries = await clockifyFetch(url);
+      return {
+        content: [
+          {
+            type: "json",
+            json: entries,
           },
         ],
       };
