@@ -75,6 +75,38 @@ export async function listToolsHandler() {
           required: ["projectId", "description", "start", "end"],
         },
       },
+      {
+        name: "listUsers",
+        description: "List all users in the workspace.",
+        inputSchema: { type: "object", properties: {}, required: [] },
+      },
+      {
+        name: "getUserTimeEntries",
+        description: "List time entries for a specified user. Optional: start, end (ISO8601).",
+        inputSchema: {
+          type: "object",
+          properties: {
+            userId: { type: "string", description: "User ID" },
+            start: { type: "string", description: "Start date (ISO8601, optional)" },
+            end: { type: "string", description: "End date (ISO8601, optional)" },
+          },
+          required: ["userId"],
+        },
+      },
+      {
+        name: "getSummaryReport",
+        description: "Get a summary report of hours by user/project for a date range. Optional: userIds, projectIds.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            start: { type: "string", description: "Start date (ISO8601)" },
+            end: { type: "string", description: "End date (ISO8601)" },
+            userIds: { type: "array", items: { type: "string" }, description: "Array of user IDs (optional)" },
+            projectIds: { type: "array", items: { type: "string" }, description: "Array of project IDs (optional)" },
+          },
+          required: ["start", "end"],
+        },
+      },
     ],
   };
 }
@@ -150,6 +182,67 @@ export async function callToolHandler(request: MCPCallToolRequest) {
           {
             type: "json",
             json: entry,
+          },
+        ],
+      };
+    }
+    case "listUsers": {
+      const users = await clockifyFetch(`/workspaces/${workspaceId}/users`);
+      return {
+        content: [
+          {
+            type: "json",
+            json: users,
+          },
+        ],
+      };
+    }
+    case "getUserTimeEntries": {
+      const { userId: targetUserId, start, end } = request.params.arguments || {};
+      if (!targetUserId) {
+        throw new Error("userId is required");
+      }
+      let url = `/workspaces/${workspaceId}/user/${targetUserId}/time-entries`;
+      const params = [];
+      if (typeof start === "string" && start) params.push(`start=${encodeURIComponent(start)}`);
+      if (typeof end === "string" && end) params.push(`end=${encodeURIComponent(end)}`);
+      if (params.length) url += `?${params.join("&")}`;
+      const entries = await clockifyFetch(url);
+      return {
+        content: [
+          {
+            type: "json",
+            json: entries,
+          },
+        ],
+      };
+    }
+    case "getSummaryReport": {
+      const { start, end, userIds, projectIds } = request.params.arguments || {};
+      if (!start || !end) {
+        throw new Error("start and end are required");
+      }
+      const body: any = {
+        dateRangeStart: start,
+        dateRangeEnd: end,
+        users: Array.isArray(userIds) ? userIds : undefined,
+        projects: Array.isArray(projectIds) ? projectIds : undefined,
+        summaryFilter: {},
+        sortOrder: "ASCENDING",
+        groups: ["USER", "PROJECT"],
+      };
+      const report = await clockifyFetch(
+        `/workspaces/${workspaceId}/reports/summary`,
+        {
+          method: "POST",
+          body: JSON.stringify(body),
+        }
+      );
+      return {
+        content: [
+          {
+            type: "json",
+            json: report,
           },
         ],
       };

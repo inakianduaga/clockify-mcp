@@ -84,9 +84,12 @@ Or, if running locally (see above), adjust the `command` and `args` accordingly.
 
 ## Features
 
-- List all projects for the authenticated user
-- List time entries for the authenticated user (with optional date filters)
-- Add time entries to a project
+- **listProjects:** List all projects for the authenticated user
+- **getTimeEntries:** List time entries for the authenticated user (with optional date filters)
+- **addTimeEntry:** Add time entries to a project
+- **listUsers:** List all users in the workspace
+- **getUserTimeEntries:** List time entries for any user (with optional date filters)
+- **getSummaryReport:** Get a summary report of hours by user/project for a date range (optionally filtered by userIds/projectIds). Enables monthly/hourly breakdowns for any user or project.
 
 ## Memory Bank & Optimizations
 

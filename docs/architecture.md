@@ -15,6 +15,9 @@ The Clockify MCP Server is a TypeScript-based server that exposes Clockify time-
 - List all projects for the authenticated user
 - List time entries for the authenticated user (with optional date filters)
 - Add time entries to a project
+- List all users in the workspace
+- List time entries for any user (with optional date filters)
+- Get a summary report of hours by user/project for a date range (optionally filtered by userIds/projectIds)
 
 ## Authentication
 
@@ -41,3 +44,7 @@ graph TD
 
 - Additional Clockify features can be added as new MCP tools.
 - Multi-user support could be added by extending the authentication and tool logic.
+
+## Notes
+
+- The `getSummaryReport` tool uses the Clockify reports API for efficient aggregation of hours by user/project and time period, enabling monthly or custom breakdowns.

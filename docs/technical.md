@@ -12,6 +12,9 @@
 - **listProjects:** Lists all projects for the authenticated user.
 - **getTimeEntries:** Lists time entries for the authenticated user, with optional start/end date filters.
 - **addTimeEntry:** Adds a time entry to a specified project.
+- **listUsers:** Lists all users in the workspace. (Clockify: `/workspaces/{workspaceId}/users`)
+- **getUserTimeEntries:** Lists time entries for a specified user, with optional date filters. (Clockify: `/workspaces/{workspaceId}/user/{userId}/time-entries`)
+- **getSummaryReport:** Gets a summary report of hours by user/project for a date range, optionally filtered by userIds/projectIds. Uses the Clockify reports API (`/workspaces/{workspaceId}/reports/summary`).
 
 ## Authentication
 
