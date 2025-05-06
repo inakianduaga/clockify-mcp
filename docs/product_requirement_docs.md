@@ -1,9 +1,11 @@
 # Product Requirement Document (PRD)
 
 ## Purpose
+
 Enable LLMs (such as Cursor) to interact with Clockify for time-tracking automation and queries, via a secure, extensible MCP server.
 
 ## Core Requirements
+
 - **Single-user support:** The server operates for the user whose Clockify API key is provided.
 - **MCP protocol:** The server must implement the MCP protocol using the official SDK for compatibility with LLMs and tools like Cursor.
 - **Clockify integration:**
@@ -18,15 +20,18 @@ Enable LLMs (such as Cursor) to interact with Clockify for time-tracking automat
   - Should be easy to add more Clockify features as new MCP tools
 
 ## Out of Scope
+
 - Multi-user support (future extension)
 - Database or persistent storage (all data comes from Clockify API)
 
 ## User Stories
+
 - As a user, I want to list my Clockify projects from Cursor.
 - As a user, I want to see my time entries, optionally filtered by date.
 - As a user, I want to add a time entry to a project from Cursor.
 
 ## Acceptance Criteria
+
 - The server exposes the three tools (listProjects, getTimeEntries, addTimeEntry) via MCP.
 - The server reads the API key from MCP config and authenticates all requests to Clockify.
 - The server can be run as a Docker container (primary) or locally (alternative).

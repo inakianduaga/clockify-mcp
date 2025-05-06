@@ -39,12 +39,14 @@ This will start the MCP server and make it available for integration with Cursor
    ```
 
 ## How to Obtain a Clockify API Key
+
 1. Log in to your [Clockify account](https://clockify.me/login).
 2. Click on your profile icon (top right) and select **Profile**.
 3. Scroll down to the **API** section.
 4. Click **Generate** if you don't have an API key, or copy your existing key.
 
 ## MCP Server Configuration for Cursor
+
 Add the following to your Cursor `settings.json` (replace `YOUR_API_KEY`):
 
 ```json
@@ -64,9 +66,11 @@ Add the following to your Cursor `settings.json` (replace `YOUR_API_KEY`):
 Or, if running locally (see above), adjust the `command` and `args` accordingly.
 
 ## Features
+
 - List all projects for the authenticated user
 - List time entries for the authenticated user (with optional date filters)
 - Add time entries to a project
 
 ## Memory Bank & Optimizations
+
 See: https://github.com/Bhartendu-Kumar/rules_template
