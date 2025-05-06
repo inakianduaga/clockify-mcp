@@ -12,9 +12,7 @@
   ],
   "scripts": {
     "test": "vitest run",
-    "test:ui": "vitest --ui",
     "build": "tsc && node -e \"require('fs').chmodSync('build/index.js', '755')\"",
-    "prepare": "npm run build",
     "watch": "tsc --watch",
     "inspector": "npx @modelcontextprotocol/inspector build/index.js",
     "docker:build": "docker build -t clockify-mcp ."

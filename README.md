@@ -7,14 +7,14 @@ Allow LLMs to interact with Clockify, to add & lookup times
 This project uses GitHub Actions to automatically build and publish the Docker image to GitHub Container Registry (GHCR) on every push to `main`.
 
 - **Image URL:**
-  `ghcr.io/<your-github-username>/clockify-mcp:latest`
+  `ghcr.io/inakianduaga/clockify-mcp:latest`
 - **How to pull the image:**
   ```bash
-  docker pull ghcr.io/<your-github-username>/clockify-mcp:latest
+  docker pull ghcr.io/inakianduaga/clockify-mcp:latest
   ```
 - **How to run:**
   ```bash
-  docker run -e CLOCKIFY_API_KEY=YOUR_API_KEY ghcr.io/<your-github-username>/clockify-mcp:latest
+  docker run -e CLOCKIFY_API_KEY=YOUR_API_KEY ghcr.io/inakianduaga/clockify-mcp:latest
   ```
 
 You can view published images in the "Packages" section of your GitHub profile or repository.
@@ -31,6 +31,12 @@ The recommended way to run the Clockify MCP server is via Docker:
    ```bash
    docker run -e CLOCKIFY_API_KEY=YOUR_API_KEY clockify-mcp
    ```
+
+Or pull the prebuilt image:
+```bash
+docker pull ghcr.io/inakianduaga/clockify-mcp:latest
+docker run -e CLOCKIFY_API_KEY=YOUR_API_KEY ghcr.io/inakianduaga/clockify-mcp:latest
+```
 
 This will start the MCP server and make it available for integration with Cursor or other LLMs.
 
@@ -71,7 +77,7 @@ Add the following to your Cursor `settings.json` (replace `YOUR_API_KEY`):
   "mcpServers": {
     "clockify-mcp": {
       "command": "docker",
-      "args": ["run", "-e", "CLOCKIFY_API_KEY=YOUR_API_KEY", "clockify-mcp"],
+      "args": ["run", "-e", "CLOCKIFY_API_KEY=YOUR_API_KEY", "ghcr.io/inakianduaga/clockify-mcp:latest"],
       "env": {},
       "disabled": false,
       "autoApprove": []
