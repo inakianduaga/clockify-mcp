@@ -8,6 +8,10 @@ This MCP server allows LLMs (such as Cursor or Claude) to interact with your Clo
 - Generate monthly or custom date range breakdowns of hours by user and project using the Clockify summary report API
 - Integrate with LLMs to automate, summarize, or analyze your time-tracking data
 
+<a href="https://glama.ai/mcp/servers/@inakianduaga/clockify-mcp">
+  <img width="380" height="200" src="https://glama.ai/mcp/servers/@inakianduaga/clockify-mcp/badge" alt="Clockify MCP server" />
+</a>
+
 ## Features
 - **listProjects:** List all projects for the authenticated user
 - **getTimeEntries:** List time entries for the authenticated user (with optional date filters)
