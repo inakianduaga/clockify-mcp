@@ -93,7 +93,9 @@ describe("MCP Server Tools", () => {
         { id: "u2", name: "Bob" },
       ],
     });
-    const result = await callToolHandler({ params: { name: "listUsers", arguments: {} } });
+    const result = await callToolHandler({
+      params: { name: "listUsers", arguments: {} },
+    });
     const users: Array<{ id: string; name: string }> = result.content[0].json;
     expect(users.length).toBe(2);
     expect(users[0].name).toBe("Alice");
@@ -106,9 +108,7 @@ describe("MCP Server Tools", () => {
     });
     fetchMock.mockResolvedValueOnce({
       ok: true,
-      json: async () => [
-        { id: "te1", description: "Worked on Project" },
-      ],
+      json: async () => [{ id: "te1", description: "Worked on Project" }],
     });
     const result = await callToolHandler({
       params: {
@@ -116,7 +116,8 @@ describe("MCP Server Tools", () => {
         arguments: { userId: "u1", start: "2024-01-01", end: "2024-01-31" },
       },
     });
-    const entries: Array<{ id: string; description: string }> = result.content[0].json;
+    const entries: Array<{ id: string; description: string }> =
+      result.content[0].json;
     expect(entries[0].description).toBe("Worked on Project");
   });
 
@@ -145,7 +146,9 @@ describe("MCP Server Tools", () => {
         },
       },
     });
-    const summary: { totals: Array<{ userId: string; projectId: string; totalTime: number }> } = result.content[0].json;
+    const summary: {
+      totals: Array<{ userId: string; projectId: string; totalTime: number }>;
+    } = result.content[0].json;
     expect(summary.totals.length).toBe(2);
     expect(summary.totals[0].userId).toBe("u1");
     expect(summary.totals[1].totalTime).toBe(1800);

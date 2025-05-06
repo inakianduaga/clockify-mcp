@@ -12,6 +12,8 @@
   ],
   "scripts": {
     "test": "vitest run",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
     "build": "tsc && node -e \"require('fs').chmodSync('build/index.js', '755')\"",
     "watch": "tsc --watch",
     "inspector": "npx @modelcontextprotocol/inspector build/index.js",
