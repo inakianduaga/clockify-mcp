@@ -26,7 +26,13 @@ Add the following to your Cursor or Claude `settings.json` (replace `YOUR_API_KE
   "mcpServers": {
     "clockify-mcp": {
       "command": "docker",
-      "args": ["run", "ghcr.io/inakianduaga/clockify-mcp:latest"],
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e", "CLOCKIFY_API_KEY",
+        "ghcr.io/inakianduaga/clockify-mcp:latest"  
+      ],
       "env": {
         "CLOCKIFY_API_KEY": "YOUR_API_KEY"
       },
@@ -36,46 +42,6 @@ Add the following to your Cursor or Claude `settings.json` (replace `YOUR_API_KE
   }
 }
 ```
-
-### Running the MCP Server with Docker
-
-1. **Pull the prebuilt image:**
-   ```bash
-   docker pull ghcr.io/inakianduaga/clockify-mcp:latest
-   ```
-2. **Run the container (replace `YOUR_API_KEY`):**
-   ```bash
-   docker run -e CLOCKIFY_API_KEY=YOUR_API_KEY ghcr.io/inakianduaga/clockify-mcp:latest
-   ```
-
-Or, to build locally:
-```bash
-docker build -t clockify-mcp .
-docker run -e CLOCKIFY_API_KEY=YOUR_API_KEY clockify-mcp
-```
-
-This will start the MCP server and make it available for integration with Cursor, Claude, or other LLMs.
-
-## Alternative: Run Locally (Node.js/TypeScript)
-
-1. **Clone the repository:**
-   ```bash
-   git clone <this-repo-url>
-   cd clockify-mcp
-   ```
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-3. **Run the MCP server:**
-   ```bash
-   npx ts-node src/index.ts
-   ```
-   Or build and run:
-   ```bash
-   npm run build
-   node build/index.js
-   ```
 
 ## How to Obtain a Clockify API Key
 1. Log in to your [Clockify account](https://clockify.me/login).
@@ -101,4 +67,4 @@ This project uses GitHub Actions to automatically build and publish the Docker i
 You can view published images in the "Packages" section of your GitHub profile or repository.
 
 ## Memory Bank & Optimizations
-See: https://github.com/Bhartendu-Kumar/rules_template
+Development has been done using cursor together with optimized rules. See: https://github.com/Bhartendu-Kumar/rules_template
