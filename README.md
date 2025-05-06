@@ -2,6 +2,23 @@
 
 Allow LLMs to interact with Clockify, to add & lookup times
 
+## CI/CD & Docker Image Publishing
+
+This project uses GitHub Actions to automatically build and publish the Docker image to GitHub Container Registry (GHCR) on every push to `main`.
+
+- **Image URL:**
+  `ghcr.io/<your-github-username>/clockify-mcp:latest`
+- **How to pull the image:**
+  ```bash
+  docker pull ghcr.io/<your-github-username>/clockify-mcp:latest
+  ```
+- **How to run:**
+  ```bash
+  docker run -e CLOCKIFY_API_KEY=YOUR_API_KEY ghcr.io/<your-github-username>/clockify-mcp:latest
+  ```
+
+You can view published images in the "Packages" section of your GitHub profile or repository.
+
 ## Quick Start (Docker)
 
 The recommended way to run the Clockify MCP server is via Docker:
