@@ -68,3 +68,7 @@ You can view published images in the "Packages" section of your GitHub profile o
 
 ## Memory Bank & Optimizations
 Development has been done using cursor together with optimized rules. See: https://github.com/Bhartendu-Kumar/rules_template
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
