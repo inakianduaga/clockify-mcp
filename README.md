@@ -1,6 +1,10 @@
 [![Build Status](https://github.com/inakianduaga/clockify-mcp/actions/workflows/docker-publish.yml/badge.svg?branch=main)](https://github.com/inakianduaga/clockify-mcp/actions/workflows/docker-publish.yml)
 [![Docker Image](https://img.shields.io/badge/ghcr.io-inakianduaga%2Fclockify--mcp-blue?logo=docker)](https://github.com/users/inakianduaga/packages/container/package/clockify-mcp)
 
+<a href="https://glama.ai/mcp/servers/@inakianduaga/clockify-mcp">
+  <img width="380" height="200" src="https://glama.ai/mcp/servers/@inakianduaga/clockify-mcp/badge" alt="Clockify MCP server" />
+</a>
+
 # Clockify MCP Server
 
 This MCP server allows LLMs (such as Cursor or Claude) to interact with your Clockify workspace, enabling advanced time-tracking automation and reporting. With this server, you can:
