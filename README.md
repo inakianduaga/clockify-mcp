@@ -1,3 +1,6 @@
+[![Build Status](https://github.com/inakianduaga/clockify-mcp/actions/workflows/docker-publish.yml/badge.svg?branch=main)](https://github.com/inakianduaga/clockify-mcp/actions/workflows/docker-publish.yml)
+[![Docker Image](https://img.shields.io/badge/ghcr.io-inakianduaga%2Fclockify--mcp-blue?logo=docker)](https://github.com/users/inakianduaga/packages/container/package/clockify-mcp)
+
 # Clockify MCP Server
 
 This MCP server allows LLMs (such as Cursor or Claude) to interact with your Clockify workspace, enabling advanced time-tracking automation and reporting. With this server, you can:
@@ -7,6 +10,10 @@ This MCP server allows LLMs (such as Cursor or Claude) to interact with your Clo
 - Pull timesheets for any user across all projects
 - Generate monthly or custom date range breakdowns of hours by user and project using the Clockify summary report API
 - Integrate with LLMs to automate, summarize, or analyze your time-tracking data
+
+<p align="center">
+  <img src="assets/clockify_example.png" alt="Clockify Example" width="600" />
+</p>
 
 ## Features
 - **listProjects:** List all projects for the authenticated user
@@ -30,12 +37,9 @@ Add the following to your Cursor or Claude `settings.json` (replace `YOUR_API_KE
         "run",
         "-i",
         "--rm",
-        "-e", "CLOCKIFY_API_KEY",
+        "-e", "CLOCKIFY_API_KEY=<YOUR_API_KEY>",
         "ghcr.io/inakianduaga/clockify-mcp:latest"  
       ],
-      "env": {
-        "CLOCKIFY_API_KEY": "YOUR_API_KEY"
-      },
       "disabled": false,
       "autoApprove": []
     }
@@ -58,10 +62,6 @@ This project uses GitHub Actions to automatically build and publish the Docker i
 - **How to pull the image:**
   ```bash
   docker pull ghcr.io/inakianduaga/clockify-mcp:latest
-  ```
-- **How to run:**
-  ```bash
-  docker run -e CLOCKIFY_API_KEY=YOUR_API_KEY ghcr.io/inakianduaga/clockify-mcp:latest
   ```
 
 You can view published images in the "Packages" section of your GitHub profile or repository.
