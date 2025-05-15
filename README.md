@@ -1,5 +1,6 @@
 [![Build Status](https://github.com/inakianduaga/clockify-mcp/actions/workflows/docker-publish.yml/badge.svg?branch=main)](https://github.com/inakianduaga/clockify-mcp/actions/workflows/docker-publish.yml)
 [![Docker Image](https://img.shields.io/badge/ghcr.io-inakianduaga%2Fclockify--mcp-blue?logo=docker)](https://github.com/users/inakianduaga/packages/container/package/clockify-mcp)
+[![smithery badge](https://smithery.ai/badge/@inakianduaga/clockify-mcp)](https://smithery.ai/server/@inakianduaga/clockify-mcp)
 
 <a href="https://glama.ai/mcp/servers/@inakianduaga/clockify-mcp">
   <img width="380" height="200" src="https://glama.ai/mcp/servers/@inakianduaga/clockify-mcp/badge" alt="Clockify MCP server" />
@@ -28,6 +29,14 @@ This MCP server allows LLMs (such as Cursor or Claude) to interact with your Clo
 - **getSummaryReport:** Get a summary report of hours by user/project for a date range (optionally filtered by userIds/projectIds). Enables monthly/hourly breakdowns for any user or project.
 
 ## Quick Start (Docker — Preferred)
+
+### Installing via Smithery
+
+To install Clockify Time Tracking Integration for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@inakianduaga/clockify-mcp):
+
+```bash
+npx -y @smithery/cli install @inakianduaga/clockify-mcp --client claude
+```
 
 ### MCP Server Configuration for Cursor/Claude
 Add the following to your Cursor or Claude `settings.json` (replace `YOUR_API_KEY`):
