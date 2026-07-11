@@ -269,17 +269,30 @@ export async function callToolHandler(request: MCPCallToolRequest) {
       if (!start || !end) {
         throw new Error("start and end are required");
       }
-      const body = {
+      const body: Record<string, unknown> = {
         dateRangeStart: start,
         dateRangeEnd: end,
-        users: Array.isArray(userIds) ? userIds : undefined,
-        projects: Array.isArray(projectIds) ? projectIds : undefined,
-        summaryFilter: {},
+        summaryFilter: {
+          groups: ["USER", "PROJECT"],
+        },
         sortOrder: "ASCENDING",
-        groups: ["USER", "PROJECT"],
       };
+      if (Array.isArray(userIds) && userIds.length > 0) {
+        body.users = {
+          ids: userIds,
+          contains: "CONTAINS",
+          status: "ALL",
+        };
+      }
+      if (Array.isArray(projectIds) && projectIds.length > 0) {
+        body.projects = {
+          ids: projectIds,
+          contains: "CONTAINS",
+          status: "ALL",
+        };
+      }
       const report = await clockifyFetch(
-        `/workspaces/${workspaceId}/reports/summary`,
+        `https://reports.api.clockify.me/v1/workspaces/${workspaceId}/reports/summary`,
         {
           method: "POST",
           body: JSON.stringify(body),
