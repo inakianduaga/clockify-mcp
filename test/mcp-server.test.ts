@@ -159,6 +159,23 @@ describe("MCP Server Tools", () => {
     expect(summary.totals.length).toBe(2);
     expect(summary.totals[0].userId).toBe("u1");
     expect(summary.totals[1].totalTime).toBe(1800);
+
+    const [reportUrl, reportInit] = fetchMock.mock.calls[1];
+    expect(reportUrl).toBe(
+      "https://reports.api.clockify.me/v1/workspaces/ws1/reports/summary",
+    );
+    const sentBody = JSON.parse(reportInit.body);
+    expect(sentBody.summaryFilter.groups).toEqual(["USER", "PROJECT"]);
+    expect(sentBody.users).toEqual({
+      ids: ["u1", "u2"],
+      contains: "CONTAINS",
+      status: "ALL",
+    });
+    expect(sentBody.projects).toEqual({
+      ids: ["p1", "p2"],
+      contains: "CONTAINS",
+      status: "ALL",
+    });
   });
 
   it("should call getUserTimeEntriesByName tool and return mocked entries", async () => {
