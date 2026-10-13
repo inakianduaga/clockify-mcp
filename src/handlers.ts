@@ -72,8 +72,35 @@ export async function listToolsHandler() {
             },
             start: { type: "string", description: "Start time (ISO8601)" },
             end: { type: "string", description: "End time (ISO8601)" },
+            tagIds: {
+              type: "array",
+              items: { type: "string" },
+              description: "Array of tag IDs (optional, see listTags)",
+            },
           },
           required: ["projectId", "description", "start", "end"],
+        },
+      },
+      {
+        name: "listTags",
+        description: "List all tags in the workspace.",
+        inputSchema: { type: "object", properties: {}, required: [] },
+      },
+      {
+        name: "setTimeEntryTags",
+        description:
+          "Replace the tags of an existing time entry of the authenticated user.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            timeEntryId: { type: "string", description: "Time entry ID" },
+            tagIds: {
+              type: "array",
+              items: { type: "string" },
+              description: "Array of tag IDs (see listTags)",
+            },
+          },
+          required: ["timeEntryId", "tagIds"],
         },
       },
       {
@@ -168,7 +195,7 @@ export async function callToolHandler(request: MCPCallToolRequest) {
   switch (request.params.name) {
     case "listProjects": {
       const projects = await clockifyFetch(
-        `/workspaces/${workspaceId}/projects`,
+        `/workspaces/${workspaceId}/projects?page-size=5000`,
       );
       return {
         content: [
@@ -199,7 +226,7 @@ export async function callToolHandler(request: MCPCallToolRequest) {
       };
     }
     case "addTimeEntry": {
-      const { projectId, description, start, end } =
+      const { projectId, description, start, end, tagIds } =
         request.params.arguments || {};
       if (!projectId || !description || !start || !end) {
         throw new Error("projectId, description, start, and end are required");
@@ -209,11 +236,65 @@ export async function callToolHandler(request: MCPCallToolRequest) {
         end,
         description,
         projectId,
+        tagIds: Array.isArray(tagIds) ? tagIds : undefined,
       };
       const entry = await clockifyFetch(
         `/workspaces/${workspaceId}/time-entries`,
         {
           method: "POST",
+          body: JSON.stringify(body),
+        },
+      );
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(entry, null, 2),
+          },
+        ],
+      };
+    }
+    case "listTags": {
+      const tags = await clockifyFetch(
+        `/workspaces/${workspaceId}/tags?page-size=5000`,
+      );
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(tags, null, 2),
+          },
+        ],
+      };
+    }
+    case "setTimeEntryTags": {
+      const { timeEntryId, tagIds } = request.params.arguments || {};
+      if (!timeEntryId || !Array.isArray(tagIds)) {
+        throw new Error("timeEntryId and tagIds are required");
+      }
+      // PUT replaces the whole entry, so carry over the existing fields
+      const current = await clockifyFetch(
+        `/workspaces/${workspaceId}/time-entries/${timeEntryId}`,
+      );
+      const body = {
+        start: current.timeInterval.start,
+        end: current.timeInterval.end,
+        description: current.description,
+        projectId: current.projectId,
+        taskId: current.taskId,
+        billable: current.billable,
+        customFields: (current.customFieldValues || []).map(
+          (c: { customFieldId: string; value: unknown }) => ({
+            customFieldId: c.customFieldId,
+            value: c.value,
+          }),
+        ),
+        tagIds,
+      };
+      const entry = await clockifyFetch(
+        `/workspaces/${workspaceId}/time-entries/${timeEntryId}`,
+        {
+          method: "PUT",
           body: JSON.stringify(body),
         },
       );
